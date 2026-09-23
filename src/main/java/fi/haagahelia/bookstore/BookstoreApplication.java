@@ -28,31 +28,33 @@ public class BookstoreApplication {
             CategoryRepository categoryRepository) {
 
         return (args) -> {
-            Category fiction = new Category("Fiction");
-            Category classics = new Category("Classics");
+            if (bookRepository.count() == 0) {
+                Category fiction = new Category("Fiction");
+                Category classics = new Category("Classics");
 
-            categoryRepository.save(fiction);
-            categoryRepository.save(classics);
+                categoryRepository.save(fiction);
+                categoryRepository.save(classics);
 
-            Book firstBook = new Book(
-                "A Farewell to Arms",
-                "Ernest Hemingway",
-                1929,
-                "1232323-21",
-                15.90
-            );
-            firstBook.setCategory(classics);
-            bookRepository.save(firstBook);
+                Book firstBook = new Book(
+                    "A Farewell to Arms",
+                    "Ernest Hemingway",
+                    1929,
+                    "1232323-21",
+                    15.90
+                );
+                firstBook.setCategory(classics);
+                bookRepository.save(firstBook);
 
-            Book secondBook = new Book(
-                "Animal Farm",
-                "George Orwell",
-                1945,
-                "2212343-5",
-                12.50
-            );
-            secondBook.setCategory(fiction);
-            bookRepository.save(secondBook);
+                Book secondBook = new Book(
+                    "Animal Farm",
+                    "George Orwell",
+                    1945,
+                    "2212343-5",
+                    12.50
+                );
+                secondBook.setCategory(fiction);
+                bookRepository.save(secondBook);
+            }
 
             log.info("fetch all books");
 
