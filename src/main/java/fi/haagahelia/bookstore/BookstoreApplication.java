@@ -2,7 +2,6 @@ package fi.haagahelia.bookstore;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,13 +24,19 @@ public class BookstoreApplication {
     public CommandLineRunner demo(BookRepository repository) {
         return (args) -> {
             repository.save(new Book(
-                "A Farewell to Arms", "Ernest Hemingway", 1929,
-                "9780684801469", 15.90
+                "A Farewell to Arms",
+                "Ernest Hemingway",
+                1929,
+                "1232323-21",
+                15.90
             ));
 
             repository.save(new Book(
-                "Animal Farm", "George Orwell", 1945,
-                "9780451526342", 12.50
+                "Animal Farm",
+                "George Orwell",
+                1945,
+                "2212343-5",
+                12.50
             ));
 
             log.info("fetch all books");
