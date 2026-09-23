@@ -2,12 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bookstore</title>
+    <link type="text/css" rel="stylesheet"
+          href="/css/bootstrap.min.css"
+          th:href="@{/css/bootstrap.min.css}" />
 </head>
-<body>
+<body class="container mt-4">
     <h1>Books</h1>
 
-    <table>
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Author</th>
@@ -25,15 +29,17 @@
                 <td th:text="${book.publicationYear}"></td>
                 <td>
                     <form th:action="@{/delete/{id}(id=${book.id})}"
-                          method="post">
-                        <button type="submit">Delete</button>
+                          method="post" class="d-inline">
+                        <button type="submit"
+                                class="btn btn-danger">Delete</button>
                     </form>
-                        <a th:href="@{/edit/{id}(id=${book.id})}">Edit</a>
+                    <a th:href="@{/edit/{id}(id=${book.id})}"
+                       class="btn btn-primary">Edit</a>
                 </td>
             </tr>
         </tbody>
     </table>
 
-    <a th:href="@{/add}">Add Book</a>
+    <a th:href="@{/add}" class="btn btn-success">Add Book</a>
 </body>
 </html>
