@@ -36,7 +36,16 @@
             <input type="number" id="price" step="0.01" min="0"
                    th:field="*{price}" required>
         </div>
-
+        <div>
+            <label for="categoryId">Category</label>
+            <select id="categoryId" name="categoryId" required>
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}"
+                        th:selected="${book.category != null and book.category.id == category.id}">
+                </option>
+            </select>
+        </div>
         <button type="submit">Save</button>
     </form>
 
