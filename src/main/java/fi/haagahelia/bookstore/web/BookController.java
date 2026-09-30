@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import fi.haagahelia.bookstore.domain.Book;
 import fi.haagahelia.bookstore.domain.BookRepository;
-import org.springframework.web.bind.annotation.RequestParam;
 import fi.haagahelia.bookstore.domain.CategoryRepository;
 
 @Controller
@@ -19,7 +19,8 @@ public class BookController {
     private final BookRepository repository;
     private final CategoryRepository categoryRepository;
 
-    public BookController(BookRepository repository, CategoryRepository categoryRepository) {
+    public BookController(BookRepository repository,
+                          CategoryRepository categoryRepository) {
         this.repository = repository;
         this.categoryRepository = categoryRepository;
     }
@@ -36,6 +37,20 @@ public class BookController {
         return "booklist";
     }
 
+    // REST: return all books as JSON
+    @GetMapping("/books")
+    @ResponseBody
+    public Iterable<Book> bookListRest() {
+        return repository.findAll();
+    }
+
+    // REST: return one book by id as JSON
+    @GetMapping("/book/{id}")
+    @ResponseBody
+    public Book findBookRest(@PathVariable("id") Long id) {
+        return repository.findById(id).orElseThrow();
+    }
+
     @GetMapping("/add")
     public String addBook(Model model) {
         model.addAttribute("book", new Book());
@@ -45,8 +60,10 @@ public class BookController {
 
     @PostMapping("/save")
     public String saveBook(@ModelAttribute Book book,
-                        @RequestParam Long categoryId) {
-        book.setCategory(categoryRepository.findById(categoryId).orElseThrow());
+                           @RequestParam Long categoryId) {
+        book.setCategory(
+            categoryRepository.findById(categoryId).orElseThrow()
+        );
         repository.save(book);
         return "redirect:/booklist";
     }
@@ -56,6 +73,7 @@ public class BookController {
         repository.deleteById(id);
         return "redirect:/booklist";
     }
+
     @GetMapping("/edit/{id}")
     public String editBook(@PathVariable("id") Long id, Model model) {
         Book book = repository.findById(id).orElseThrow();
