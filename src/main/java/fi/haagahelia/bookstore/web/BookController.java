@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.security.core.Authentication;
 
 import fi.haagahelia.bookstore.domain.Book;
 import fi.haagahelia.bookstore.domain.BookRepository;
@@ -32,8 +33,16 @@ public class BookController {
     }
 
     @GetMapping("/booklist")
-    public String bookList(Model model) {
+    public String bookList(Model model, Authentication authentication) {
         model.addAttribute("books", repository.findAll());
+        model.addAttribute("username", authentication.getName());
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+            .anyMatch(authority ->
+                authority.getAuthority().equals("ROLE_ADMIN"));
+
+        model.addAttribute("isAdmin", isAdmin);
+
         return "booklist";
     }
 
@@ -80,5 +89,10 @@ public class BookController {
         model.addAttribute("book", book);
         model.addAttribute("categories", categoryRepository.findAll());
         return "editbook";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 }

@@ -4,12 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bookstore</title>
-    <link type="text/css" rel="stylesheet"
-          href="/css/bootstrap.min.css"
-          th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 </head>
 <body class="container mt-4">
     <h1>Books</h1>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <p class="mb-0">
+            Welcome, <strong th:text="${username}"></strong>!
+        </p>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn btn-secondary">
+                Logout
+            </button>
+        </form>
+    </div>
 
     <table class="table table-striped">
         <thead>
@@ -30,13 +40,19 @@
                 <td th:text="${book.publicationYear}"></td>
                 <td th:text="${book.category != null ? book.category.name : ''}"></td>
                 <td>
-                    <form th:action="@{/delete/{id}(id=${book.id})}"
-                          method="post" class="d-inline">
-                        <button type="submit"
-                                class="btn btn-danger">Delete</button>
+                    <form th:if="${isAdmin}"
+                          th:action="@{/delete/{id}(id=${book.id})}"
+                          method="post"
+                          class="d-inline">
+                        <button type="submit" class="btn btn-danger">
+                            Delete
+                        </button>
                     </form>
+
                     <a th:href="@{/edit/{id}(id=${book.id})}"
-                       class="btn btn-primary">Edit</a>
+                       class="btn btn-primary">
+                        Edit
+                    </a>
                 </td>
             </tr>
         </tbody>
