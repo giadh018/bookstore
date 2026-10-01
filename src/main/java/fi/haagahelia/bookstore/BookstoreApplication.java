@@ -11,6 +11,9 @@ import fi.haagahelia.bookstore.domain.Book;
 import fi.haagahelia.bookstore.domain.BookRepository;
 import fi.haagahelia.bookstore.domain.Category;
 import fi.haagahelia.bookstore.domain.CategoryRepository;
+import fi.haagahelia.bookstore.domain.AppUser;
+import fi.haagahelia.bookstore.domain.AppUserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class BookstoreApplication {
@@ -61,6 +64,31 @@ public class BookstoreApplication {
             for (Book book : bookRepository.findAll()) {
                 log.info("Book id={}, title={}",
                         book.getId(), book.getTitle());
+            }
+        };
+    }
+        @Bean
+    public CommandLineRunner createUsers(
+            AppUserRepository userRepository,
+            PasswordEncoder passwordEncoder) {
+
+        return args -> {
+            if (userRepository.findByUsername("user") == null) {
+                userRepository.save(new AppUser(
+                    "user",
+                    passwordEncoder.encode("user"),
+                    "user@example.com",
+                    "USER"
+                ));
+            }
+
+            if (userRepository.findByUsername("admin") == null) {
+                userRepository.save(new AppUser(
+                    "admin",
+                    passwordEncoder.encode("admin"),
+                    "admin@example.com",
+                    "ADMIN"
+                ));
             }
         };
     }
